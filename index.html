@@ -23,6 +23,7 @@
             --text-secondary: #94a3b8;
             --border: #334155;
             --success: #4ade80;
+            --warning: #fb923c;
         }
 
         body {
@@ -30,129 +31,151 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             color: var(--text-primary);
+            overflow-x: hidden;
         }
 
         .app-header {
             background: var(--dark-panel);
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
 
         .app-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lightning-icon {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         .learning-goals {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
             background: var(--dark-panel);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin: 1rem auto;
-            max-width: 1600px;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
         .goal-badge {
-            display: inline-block;
-            background: var(--dark-input);
             padding: 0.25rem 0.75rem;
+            background: var(--dark-input);
             border-radius: 20px;
-            margin: 0.25rem;
-            font-size: 0.85rem;
-            color: var(--text-primary);
+            font-size: 0.8rem;
+            white-space: nowrap;
             border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .goal-badge:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
         }
 
         .main-container {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 1rem;
             display: grid;
-            grid-template-columns: 350px 1fr 350px;
+            grid-template-columns: 320px 1fr 380px;
             gap: 1rem;
+            min-height: calc(100vh - 140px);
+        }
+
+        @media (max-width: 1400px) {
+            .main-container {
+                grid-template-columns: 280px 1fr 340px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                max-width: 900px;
+            }
         }
 
         .panel {
             background: var(--dark-panel);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.25rem;
+            padding: 1rem;
+            height: fit-content;
         }
 
         .panel-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .control-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
-        .control-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+        .control-group-title {
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-secondary);
+            margin-bottom: 0.5rem;
         }
 
-        .control-value {
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--dark-input);
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-
-        .preset-grid {
+        .preset-buttons {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
 
         .preset-btn {
-            padding: 0.75rem;
+            padding: 0.5rem;
             background: var(--dark-input);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 6px;
             color: var(--text-primary);
-            font-size: 0.85rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
         }
 
         .preset-btn:hover {
-            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--dark);
+            transform: scale(1.05);
         }
 
         .preset-btn.active {
@@ -160,141 +183,125 @@
             color: var(--dark);
         }
 
-        .material-selector {
+        .slider-control {
+            margin-bottom: 1rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: var(--dark-input);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .material-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            gap: 0.4rem;
         }
 
         .material-btn {
-            padding: 0.5rem;
+            padding: 0.4rem;
             background: var(--dark-input);
             border: 1px solid var(--border);
             border-radius: 6px;
-            cursor: pointer;
             color: var(--text-primary);
-            font-size: 0.8rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
         }
 
         .material-btn.selected {
             background: var(--secondary);
             color: var(--dark);
+            font-weight: 600;
         }
 
         .canvas-container {
-            position: relative;
             width: 100%;
-            height: 450px;
+            height: 400px;
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 12px;
+            border-radius: 8px;
+            position: relative;
             overflow: hidden;
             border: 1px solid var(--border);
         }
 
-        canvas {
-            display: block;
-        }
-
-        .measurement-overlay {
+        .live-data-overlay {
             position: absolute;
             top: 10px;
             left: 10px;
-            background: rgba(15,23,42,0.95);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
-        }
-
-        .btn {
-            padding: 0.75rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: var(--dark);
-        }
-
-        .btn-secondary {
-            background: var(--secondary);
-            color: var(--dark);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: var(--dark);
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .data-card {
-            background: var(--dark-input);
-            padding: 0.75rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .data-label {
+            background: rgba(15,23,42,0.9);
+            padding: 0.5rem;
+            border-radius: 6px;
             font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .data-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .trials-container {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 0.5rem;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            backdrop-filter: blur(10px);
         }
 
-        .trials-header {
-            display: grid;
-            grid-template-columns: 40px 1fr 70px 70px 50px;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: var(--dark-input);
-            font-weight: 600;
+        .live-data-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 0.25rem 0;
+        }
+
+        .live-data-label {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            position: sticky;
-            top: 0;
         }
 
-        .trial-row {
-            display: grid;
-            grid-template-columns: 40px 1fr 70px 70px 50px;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.85rem;
-        }
-
-        .trial-row.best {
-            background: rgba(52,211,153,0.1);
+        .live-data-value {
+            font-weight: 600;
+            font-family: monospace;
         }
 
         .formula-box {
             background: var(--dark-input);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin: 0.75rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
             text-align: center;
         }
 
@@ -306,66 +313,352 @@
         .chart-container {
             height: 200px;
             background: var(--dark-input);
-            border-radius: 8px;
-            padding: 1rem;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: relative;
+            margin-top: 0.75rem;
+        }
+
+        .chart-title {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
 
-        @media (max-width: 1200px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
+        .btn {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-card {
+            background: var(--dark-input);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .result-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-unit {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .trials-table {
+            background: var(--dark-input);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+        }
+
+        .trials-header {
+            display: grid;
+            grid-template-columns: 30px 1fr 60px 60px 40px;
+            padding: 0.5rem;
+            background: var(--dark);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .trial-row {
+            display: grid;
+            grid-template-columns: 30px 1fr 60px 60px 40px;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .trial-row:hover {
+            background: rgba(96,165,250,0.1);
+        }
+
+        .trial-row.best {
+            background: rgba(52,211,153,0.1);
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: var(--dark-input);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .switch.active {
+            background: var(--primary);
+        }
+
+        .switch-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .switch.active .switch-slider {
+            transform: translateX(20px);
+        }
+
+        .impact-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--danger);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            animation: flash 0.5s;
+            display: none;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .energy-bar {
+            height: 8px;
+            background: var(--dark-input);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transition: width 0.3s;
+        }
+
+        .comparison-mode {
+            display: none;
+            background: var(--warning);
+            color: var(--dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-mode.active {
+            display: block;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        .fun-fact {
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+            color: var(--dark);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-top: 0.75rem;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
     <div class="app-header">
         <div class="header-content">
-            <h1 class="app-title">⚡ Collision Forces Laboratory</h1>
-            <div>OpenSciEd Unit 8.1</div>
+            <div class="app-title">
+                <span class="lightning-icon">⚡</span>
+                <span>Collision Forces Laboratory</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">OpenSciEd Unit 8.1</div>
         </div>
     </div>
 
     <div class="learning-goals">
-        <strong>Learning Objectives:</strong>
-        <span class="goal-badge">F = ma</span>
-        <span class="goal-badge">KE = ½mv²</span>
-        <span class="goal-badge">Energy Transfer</span>
-        <span class="goal-badge">Material Properties</span>
-        <span class="goal-badge">Engineering Design</span>
+        <div style="color: var(--text-secondary); font-size: 0.85rem;">Learning Objectives:</div>
+        <div class="goal-badge">F = ma</div>
+        <div class="goal-badge">KE = ½mv²</div>
+        <div class="goal-badge">Energy Transfer</div>
+        <div class="goal-badge">Material Properties</div>
+        <div class="goal-badge">Engineering Design</div>
+        <div class="goal-badge">Impulse J = FΔt</div>
+        <div class="goal-badge">Momentum p = mv</div>
     </div>
 
     <div class="main-container">
-        <!-- Controls -->
+        <!-- Controls Panel -->
         <div class="panel">
-            <div class="panel-title">⚙️ Controls</div>
-            
+            <div class="panel-title">
+                <span>⚙️</span>
+                <span>Controls</span>
+            </div>
+
+            <div class="preset-buttons">
+                <button class="preset-btn" onclick="loadPreset('drop')">
+                    <span>📱</span> Drop Test
+                </button>
+                <button class="preset-btn" onclick="loadPreset('mass')">
+                    <span>⚖️</span> Mass Study
+                </button>
+                <button class="preset-btn" onclick="loadPreset('height')">
+                    <span>📏</span> Height Test
+                </button>
+                <button class="preset-btn" onclick="loadPreset('materials')">
+                    <span>🧪</span> Materials
+                </button>
+            </div>
+
             <div class="control-group">
-                <div class="preset-grid">
-                    <button class="preset-btn" onclick="loadPreset('drop')">📱 Drop Test</button>
-                    <button class="preset-btn" onclick="loadPreset('mass')">⚖️ Mass Study</button>
-                    <button class="preset-btn" onclick="loadPreset('height')">📏 Height Test</button>
-                    <button class="preset-btn" onclick="loadPreset('materials')">🧪 Materials</button>
+                <div class="slider-control">
+                    <div class="slider-label">
+                        <span>Mass</span>
+                        <span class="slider-value" id="massValue">150 g</span>
+                    </div>
+                    <input type="range" class="slider" id="mass" min="50" max="500" value="150" step="10">
+                </div>
+
+                <div class="slider-control">
+                    <div class="slider-label">
+                        <span>Drop Height</span>
+                        <span class="slider-value" id="heightValue">1.5 m</span>
+                    </div>
+                    <input type="range" class="slider" id="height" min="0.5" max="3" value="1.5" step="0.1">
+                </div>
+
+                <div class="slider-control">
+                    <div class="slider-label">
+                        <span>Initial Velocity</span>
+                        <span class="slider-value" id="velocityValue">0 m/s</span>
+                    </div>
+                    <input type="range" class="slider" id="velocity" min="0" max="10" value="0" step="0.5">
+                </div>
+
+                <div class="slider-control">
+                    <div class="slider-label">
+                        <span>Impact Angle</span>
+                        <span class="slider-value" id="angleValue">90°</span>
+                    </div>
+                    <input type="range" class="slider" id="angle" min="30" max="90" value="90" step="5">
                 </div>
             </div>
 
             <div class="control-group">
-                <div class="control-label">
-                    <span>Mass</span>
-                    <span class="control-value" id="massValue">150 g</span>
-                </div>
-                <input type="range" class="slider" id="mass" min="50" max="500" value="150" step="10" oninput="updateValue('mass')">
-                
-                <div class="control-label">
-                    <span>Drop Height</span>
-                    <span class="control-value" id="heightValue">1.5 m</span>
-                </div>
-                <input type="range" class="slider" id="height" min="0.5" max="3" value="1.5" step="0.1" oninput="updateValue('height')">
-            </div>
-
-            <div class="control-group">
-                <strong style="margin-bottom: 0.5rem; display: block;">Cushioning</strong>
-                <div class="material-selector">
+                <div class="control-group-title">Cushioning</div>
+                <div class="material-grid">
                     <button class="material-btn selected" onclick="selectMaterial('none')">None</button>
                     <button class="material-btn" onclick="selectMaterial('foam')">Foam</button>
                     <button class="material-btn" onclick="selectMaterial('gel')">Gel</button>
@@ -373,68 +666,151 @@
                     <button class="material-btn" onclick="selectMaterial('rubber')">Rubber</button>
                     <button class="material-btn" onclick="selectMaterial('spring')">Spring</button>
                 </div>
-                
-                <div class="control-label" style="margin-top: 1rem;">
-                    <span>Thickness</span>
-                    <span class="control-value" id="thicknessValue">10 mm</span>
+
+                <div class="slider-control" style="margin-top: 0.75rem;">
+                    <div class="slider-label">
+                        <span>Thickness</span>
+                        <span class="slider-value" id="thicknessValue">10 mm</span>
+                    </div>
+                    <input type="range" class="slider" id="thickness" min="0" max="30" value="10" step="1">
                 </div>
-                <input type="range" class="slider" id="thickness" min="5" max="30" value="10" oninput="updateValue('thickness')">
+
+                <div class="slider-control">
+                    <div class="slider-label">
+                        <span>Surface Friction</span>
+                        <span class="slider-value" id="frictionValue">0.3</span>
+                    </div>
+                    <input type="range" class="slider" id="friction" min="0" max="1" value="0.3" step="0.05">
+                </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem;">
-                <button class="btn btn-primary" onclick="runSimulation()">▶ RUN</button>
-                <button class="btn btn-danger" onclick="resetAll()">RESET</button>
+            <div class="toggle-switch">
+                <span style="font-size: 0.8rem;">Show Vectors</span>
+                <div class="switch" id="vectorToggle" onclick="toggleVectors()">
+                    <div class="switch-slider"></div>
+                </div>
+            </div>
+
+            <div class="toggle-switch">
+                <span style="font-size: 0.8rem;">Slow Motion</span>
+                <div class="switch" id="slowToggle" onclick="toggleSlow()">
+                    <div class="switch-slider"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">
+                    <span>▶</span> RUN
+                </button>
+                <button class="btn btn-danger" onclick="resetSimulation()">
+                    <span>↺</span> RESET
+                </button>
+            </div>
+
+            <div class="fun-fact">
+                💡 Did you know? Airbags deploy in just 20-30 milliseconds!
             </div>
         </div>
 
-        <!-- Simulation -->
+        <!-- Simulation Panel -->
         <div class="panel">
-            <div class="panel-title">🔬 Simulation</div>
-            
+            <div class="panel-title">
+                <span>🔬</span>
+                <span>Simulation</span>
+            </div>
+
             <div class="canvas-container">
                 <canvas id="simCanvas"></canvas>
-                <div class="measurement-overlay">
-                    <strong>Live Data</strong><br>
-                    Height: <span id="liveHeight">1.50</span> m<br>
-                    Velocity: <span id="liveVel">0.00</span> m/s<br>
-                    Force: <span id="liveForce">0.0</span> N<br>
-                    Time: <span id="liveTime">0.00</span> s
+                <div class="live-data-overlay">
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">Live Data</div>
+                    <div class="live-data-item">
+                        <span class="live-data-label">Height:</span>
+                        <span class="live-data-value" id="liveHeight" style="color: var(--accent);">0.45 m</span>
+                    </div>
+                    <div class="live-data-item">
+                        <span class="live-data-label">Velocity:</span>
+                        <span class="live-data-value" id="liveVelocity" style="color: var(--primary);">0.36 m/s</span>
+                    </div>
+                    <div class="live-data-item">
+                        <span class="live-data-label">Force:</span>
+                        <span class="live-data-value" id="liveForce" style="color: var(--danger);">228.0 N</span>
+                    </div>
+                    <div class="live-data-item">
+                        <span class="live-data-label">Time:</span>
+                        <span class="live-data-value" id="liveTime">3.14 s</span>
+                    </div>
                 </div>
+                <div class="impact-indicator" id="impactIndicator">IMPACT!</div>
             </div>
 
             <div class="formula-box">
-                <div class="formula">v = √(2gh) = √(2 × 9.81 × <span id="fHeight">1.5</span>) = <span id="fVel">5.42</span> m/s</div>
-                <div class="formula">KE = ½ × <span id="fMass">0.15</span> kg × <span id="fVel2">5.42</span>² = <span id="fKE">2.20</span> J</div>
+                <div class="formula">v = √(2gh) = √(2 × 9.81 × <span id="fHeight">1.5</span>) = <span id="fVelCalc">5.42</span> m/s</div>
+                <div class="formula">KE = ½ × <span id="fMass">0.15</span> kg × (<span id="fVel">5.42</span> m/s)² = <span id="fKE">2.21</span> J</div>
             </div>
 
             <div class="chart-container">
-                <canvas id="chartCanvas"></canvas>
+                <div class="chart-title">Force vs Time</div>
+                <canvas id="forceChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Velocity vs Time</div>
+                <canvas id="velocityChart"></canvas>
+            </div>
+
+            <div class="energy-bar">
+                <div class="energy-fill" id="energyBar" style="width: 0%"></div>
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary); text-align: center;">
+                Kinetic Energy: <span id="kePercent">0</span>%
             </div>
         </div>
 
-        <!-- Results -->
+        <!-- Results Panel -->
         <div class="panel">
-            <div class="panel-title">📊 Results</div>
-            
-            <div class="data-card">
-                <div class="data-label">Peak Force</div>
-                <div class="data-value" id="peakForce">---</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">Impact Time</div>
-                <div class="data-value" id="impactTime">---</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">Max Speed</div>
-                <div class="data-value" id="maxSpeed">---</div>
-            </div>
-            <div class="data-card">
-                <div class="data-label">Energy Loss</div>
-                <div class="data-value" id="energyLost">---</div>
+            <div class="panel-title">
+                <span>📊</span>
+                <span>Results</span>
             </div>
 
-            <strong style="margin: 1rem 0 0.5rem; display: block;">Trial History</strong>
-            <div class="trials-container">
+            <div class="result-card">
+                <div class="result-label">Peak Force</div>
+                <div class="result-value">
+                    <span id="peakForce">228.0</span>
+                    <span class="result-unit">N</span>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-label">Impact Time</div>
+                <div class="result-value">
+                    <span id="impactTime">2512.0</span>
+                    <span class="result-unit">ms</span>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-label">Max Speed</div>
+                <div class="result-value">
+                    <span id="maxSpeed">6.44</span>
+                    <span class="result-unit">m/s</span>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-label">Energy Loss</div>
+                <div class="result-value">
+                    <span id="energyLoss">40.7</span>
+                    <span class="result-unit">%</span>
+                </div>
+            </div>
+
+            <div class="comparison-mode" id="comparisonIndicator">
+                Comparison Mode Active
+            </div>
+
+            <div class="control-group-title" style="margin-top: 1rem;">Trial History</div>
+            <div class="trials-table">
                 <div class="trials-header">
                     <div>#</div>
                     <div>Setup</div>
@@ -442,77 +818,147 @@
                     <div>Energy</div>
                     <div>Del</div>
                 </div>
-                <div id="trialsBody"></div>
+                <div id="trialsBody">
+                    <!-- Trials will be added here -->
+                </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
-                <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
-                <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+            <div class="export-buttons">
+                <button class="btn btn-secondary" onclick="exportCSV()">
+                    Export CSV
+                </button>
+                <button class="btn btn-secondary" onclick="exportJSON()">
+                    Export JSON
+                </button>
+            </div>
+
+            <div class="chart-container" style="margin-top: 1rem;">
+                <div class="chart-title">Trial Comparison</div>
+                <canvas id="comparisonChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        // State
+        // Application state
         let state = {
             isRunning: false,
+            isPaused: false,
             material: 'none',
             trials: [],
-            trialNum: 0,
-            animId: null,
-            simData: {
-                y: 0,
-                vy: 0,
-                maxForce: 0,
-                maxVel: 0,
-                impactStart: null,
-                impactEnd: null
-            }
+            currentTrial: null,
+            trialCounter: 0,
+            animationId: null,
+            showVectors: false,
+            slowMotion: false,
+            forceData: [],
+            velocityData: [],
+            timeData: [],
+            maxDataPoints: 100
+        };
+
+        // Physics simulation state
+        let sim = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            ax: 0,
+            ay: 0,
+            time: 0,
+            maxForce: 0,
+            maxVelocity: 0,
+            impactStart: null,
+            impactEnd: null,
+            bounces: 0
+        };
+
+        // Material properties
+        const materials = {
+            none: { k: 100000, c: 0.95, color: '#64748b', density: 1 },
+            foam: { k: 5000, c: 0.3, color: '#fbbf24', density: 0.3 },
+            gel: { k: 8000, c: 0.2, color: '#60a5fa', density: 0.8 },
+            air: { k: 3000, c: 0.25, color: '#e0f2fe', density: 0.1 },
+            rubber: { k: 15000, c: 0.5, color: '#c084fc', density: 0.9 },
+            spring: { k: 10000, c: 0.35, color: '#34d399', density: 0.5 }
         };
 
         // Canvas setup
-        const canvas = document.getElementById('simCanvas');
-        const ctx = canvas.getContext('2d');
-        const chartCanvas = document.getElementById('chartCanvas');
-        const chartCtx = chartCanvas.getContext('2d');
+        const simCanvas = document.getElementById('simCanvas');
+        const simCtx = simCanvas.getContext('2d');
+        const forceChart = document.getElementById('forceChart');
+        const forceCtx = forceChart.getContext('2d');
+        const velocityChart = document.getElementById('velocityChart');
+        const velocityCtx = velocityChart.getContext('2d');
+        const comparisonChart = document.getElementById('comparisonChart');
+        const comparisonCtx = comparisonChart.getContext('2d');
 
         function initCanvas() {
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-            chartCanvas.width = rect.width - 32;
-            chartCanvas.height = 168;
+            // Simulation canvas
+            const simRect = simCanvas.parentElement.getBoundingClientRect();
+            simCanvas.width = simRect.width;
+            simCanvas.height = simRect.height;
+
+            // Chart canvases
+            const chartRect = forceChart.parentElement.getBoundingClientRect();
+            forceChart.width = chartRect.width - 16;
+            forceChart.height = 160;
+            velocityChart.width = chartRect.width - 16;
+            velocityChart.height = 160;
+            comparisonChart.width = chartRect.width - 16;
+            comparisonChart.height = 160;
+
             drawStaticScene();
         }
 
-        window.addEventListener('load', initCanvas);
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initCanvas();
+            initSliders();
+            updateFormulas();
+        });
+
         window.addEventListener('resize', initCanvas);
 
-        // Update slider values
-        function updateValue(id) {
+        // Slider initialization
+        function initSliders() {
+            const sliders = ['mass', 'height', 'velocity', 'angle', 'thickness', 'friction'];
+            sliders.forEach(id => {
+                const slider = document.getElementById(id);
+                slider.addEventListener('input', () => updateSliderValue(id));
+            });
+        }
+
+        function updateSliderValue(id) {
             const slider = document.getElementById(id);
             const display = document.getElementById(id + 'Value');
             
             const formats = {
-                mass: v => v + ' g',
-                height: v => v + ' m',
-                thickness: v => v + ' mm'
+                mass: v => `${v} g`,
+                height: v => `${v} m`,
+                velocity: v => `${v} m/s`,
+                angle: v => `${v}°`,
+                thickness: v => `${v} mm`,
+                friction: v => v
             };
             
-            display.textContent = formats[id](slider.value);
+            if (display && formats[id]) {
+                display.textContent = formats[id](slider.value);
+            }
+            
             updateFormulas();
         }
 
         function updateFormulas() {
-            const mass = document.getElementById('mass').value / 1000;
-            const height = document.getElementById('height').value;
+            const mass = parseFloat(document.getElementById('mass').value) / 1000;
+            const height = parseFloat(document.getElementById('height').value);
             const vel = Math.sqrt(2 * 9.81 * height);
             const ke = 0.5 * mass * vel * vel;
             
-            document.getElementById('fHeight').textContent = height;
-            document.getElementById('fMass').textContent = mass.toFixed(2);
+            document.getElementById('fHeight').textContent = height.toFixed(1);
+            document.getElementById('fMass').textContent = mass.toFixed(3);
+            document.getElementById('fVelCalc').textContent = vel.toFixed(2);
             document.getElementById('fVel').textContent = vel.toFixed(2);
-            document.getElementById('fVel2').textContent = vel.toFixed(2);
             document.getElementById('fKE').textContent = ke.toFixed(2);
         }
 
@@ -524,226 +970,463 @@
             });
             event.target.classList.add('selected');
             
-            // Auto-adjust thickness
-            const thickness = {none: 0, foam: 15, gel: 10, air: 20, rubber: 8, spring: 12};
-            document.getElementById('thickness').value = thickness[mat] || 10;
-            updateValue('thickness');
-        }
-
-        // Presets
-        function loadPreset(type) {
-            const presets = {
-                drop: {mass: 150, height: 1.5, material: 'none'},
-                mass: {mass: 300, height: 1, material: 'foam'},
-                height: {mass: 150, height: 2.5, material: 'foam'},
-                materials: {mass: 150, height: 1.5, material: 'gel'}
+            // Auto-adjust thickness based on material
+            const thicknessDefaults = {
+                none: 0,
+                foam: 15,
+                gel: 10,
+                air: 20,
+                rubber: 8,
+                spring: 12
             };
             
-            const p = presets[type];
-            if (p) {
-                document.getElementById('mass').value = p.mass;
-                document.getElementById('height').value = p.height;
-                updateValue('mass');
-                updateValue('height');
-                
-                // Select material button
-                state.material = p.material;
-                document.querySelectorAll('.material-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                    if (btn.textContent.toLowerCase().includes(p.material)) {
-                        btn.classList.add('selected');
+            document.getElementById('thickness').value = thicknessDefaults[mat] || 10;
+            updateSliderValue('thickness');
+        }
+
+        // Preset configurations
+        function loadPreset(type) {
+            const presets = {
+                drop: { mass: 150, height: 1.5, velocity: 0, angle: 90, material: 'none' },
+                mass: { mass: 300, height: 1, velocity: 0, angle: 90, material: 'foam' },
+                height: { mass: 150, height: 2.5, velocity: 0, angle: 90, material: 'foam' },
+                materials: { mass: 150, height: 1.5, velocity: 0, angle: 90, material: 'gel' }
+            };
+            
+            const preset = presets[type];
+            if (!preset) return;
+            
+            // Update sliders
+            Object.keys(preset).forEach(key => {
+                if (key === 'material') {
+                    state.material = preset[key];
+                    document.querySelectorAll('.material-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                        if (btn.textContent.toLowerCase() === preset[key]) {
+                            btn.classList.add('selected');
+                        }
+                    });
+                } else {
+                    const slider = document.getElementById(key);
+                    if (slider) {
+                        slider.value = preset[key];
+                        updateSliderValue(key);
                     }
-                });
-            }
+                }
+            });
+            
+            // Highlight active preset
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Toggle functions
+        function toggleVectors() {
+            state.showVectors = !state.showVectors;
+            document.getElementById('vectorToggle').classList.toggle('active');
+        }
+
+        function toggleSlow() {
+            state.slowMotion = !state.slowMotion;
+            document.getElementById('slowToggle').classList.toggle('active');
         }
 
         // Draw static scene
         function drawStaticScene() {
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            simCtx.fillStyle = '#1e293b';
+            simCtx.fillRect(0, 0, simCanvas.width, simCanvas.height);
             
             // Ground
-            ctx.fillStyle = '#334155';
-            ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+            simCtx.fillStyle = '#334155';
+            simCtx.fillRect(0, simCanvas.height - 60, simCanvas.width, 60);
             
-            // Grid lines
-            ctx.strokeStyle = 'rgba(148,163,184,0.1)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.height; i += 40) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(canvas.width, i);
-                ctx.stroke();
+            // Grid
+            simCtx.strokeStyle = 'rgba(148,163,184,0.1)';
+            simCtx.lineWidth = 1;
+            for (let i = 0; i < simCanvas.height; i += 30) {
+                simCtx.beginPath();
+                simCtx.moveTo(0, i);
+                simCtx.lineTo(simCanvas.width, i);
+                simCtx.stroke();
             }
             
             // Height markers
-            ctx.fillStyle = '#64748b';
-            ctx.font = '11px sans-serif';
+            simCtx.fillStyle = '#64748b';
+            simCtx.font = '10px sans-serif';
+            const pixelsPerMeter = 120;
             for (let h = 0; h <= 3; h += 0.5) {
-                const y = canvas.height - 80 - h * 100;
+                const y = simCanvas.height - 60 - h * pixelsPerMeter;
                 if (y > 0) {
-                    ctx.fillText(h + 'm', 5, y);
+                    simCtx.fillText(`${h}m`, 5, y);
+                    simCtx.beginPath();
+                    simCtx.moveTo(30, y);
+                    simCtx.lineTo(35, y);
+                    simCtx.stroke();
                 }
             }
         }
 
-        // Run simulation
+        // Main simulation
         function runSimulation() {
             if (state.isRunning) return;
-            state.isRunning = true;
             
-            // Reset sim data
-            state.simData = {
-                y: 50,
+            state.isRunning = true;
+            document.getElementById('runBtn').disabled = true;
+            
+            // Reset simulation state
+            sim = {
+                x: simCanvas.width / 2,
+                y: 40,
+                vx: 0,
                 vy: 0,
+                ax: 0,
+                ay: 9.81,
+                time: 0,
                 maxForce: 0,
-                maxVel: 0,
+                maxVelocity: 0,
                 impactStart: null,
                 impactEnd: null,
-                forceHistory: [],
-                time: 0
+                bounces: 0
             };
+            
+            // Clear data arrays
+            state.forceData = [];
+            state.velocityData = [];
+            state.timeData = [];
             
             // Get parameters
-            const mass = document.getElementById('mass').value / 1000;
-            const height = document.getElementById('height').value;
-            const thickness = document.getElementById('thickness').value / 1000;
-            
-            // Material properties
-            const materials = {
-                none: {k: 100000, c: 0.9},
-                foam: {k: 5000, c: 0.3},
-                gel: {k: 8000, c: 0.2},
-                air: {k: 3000, c: 0.25},
-                rubber: {k: 15000, c: 0.5},
-                spring: {k: 10000, c: 0.35}
+            const params = {
+                mass: parseFloat(document.getElementById('mass').value) / 1000,
+                height: parseFloat(document.getElementById('height').value),
+                velocity: parseFloat(document.getElementById('velocity').value),
+                angle: parseFloat(document.getElementById('angle').value) * Math.PI / 180,
+                thickness: parseFloat(document.getElementById('thickness').value) / 1000,
+                friction: parseFloat(document.getElementById('friction').value)
             };
             
-            const mat = materials[state.material];
-            const groundY = canvas.height - 80;
-            const dropHeight = height * 100; // pixels
+            // Set initial velocity
+            sim.vx = params.velocity * Math.cos(params.angle);
+            sim.vy = params.velocity * Math.sin(params.angle);
             
-            // Animation loop
-            function animate() {
-                if (!state.isRunning) return;
-                
-                // Clear and redraw
-                drawStaticScene();
-                
-                // Physics (simplified for visualization)
-                state.simData.vy += 9.81 * 0.016 * 100; // gravity scaled to pixels
-                state.simData.y += state.simData.vy * 0.016;
-                
-                const vel = Math.abs(state.simData.vy) / 100; // m/s
-                state.simData.maxVel = Math.max(state.simData.maxVel, vel);
-                
-                // Draw cushion
-                if (state.material !== 'none') {
-                    const colors = {foam: '#fbbf24', gel: '#60a5fa', air: '#e0f7fa', 
-                                   rubber: '#c084fc', spring: '#34d399'};
-                    ctx.fillStyle = colors[state.material] || '#94a3b8';
-                    ctx.fillRect(0, groundY - thickness * 3000, canvas.width, thickness * 3000);
+            animate(params);
+        }
+
+        function animate(params) {
+            if (!state.isRunning) return;
+            
+            const dt = state.slowMotion ? 0.008 : 0.016;
+            const pixelsPerMeter = 120;
+            const mat = materials[state.material];
+            
+            // Physics update
+            sim.vy += sim.ay * dt * pixelsPerMeter;
+            sim.y += sim.vy * dt;
+            sim.x += sim.vx * dt;
+            
+            const velocity = Math.sqrt(sim.vx * sim.vx + (sim.vy / pixelsPerMeter) * (sim.vy / pixelsPerMeter));
+            sim.maxVelocity = Math.max(sim.maxVelocity, velocity);
+            
+            // Collision detection
+            const groundY = simCanvas.height - 60;
+            const cushionTop = groundY - params.thickness * 5000;
+            const objectBottom = sim.y + 50;
+            
+            let force = params.mass * 9.81;
+            
+            if (objectBottom >= (state.material === 'none' ? groundY : cushionTop)) {
+                if (!sim.impactStart) {
+                    sim.impactStart = sim.time;
+                    showImpact();
                 }
                 
-                // Draw phone
-                const phoneX = canvas.width / 2;
-                ctx.fillStyle = '#334155';
-                ctx.fillRect(phoneX - 20, state.simData.y, 40, 60);
-                ctx.fillStyle = '#60a5fa';
-                ctx.fillRect(phoneX - 18, state.simData.y + 5, 36, 45);
+                // Calculate impact force
+                const penetration = Math.max(0, objectBottom - (state.material === 'none' ? groundY : cushionTop)) / pixelsPerMeter;
+                force = mat.k * penetration + mat.c * velocity * 100;
+                sim.maxForce = Math.max(sim.maxForce, force);
                 
-                // Collision detection
-                const objectBottom = state.simData.y + 60;
-                const collisionY = state.material === 'none' ? groundY : groundY - thickness * 3000;
+                // Bounce
+                sim.vy = -Math.abs(sim.vy) * (1 - mat.c);
+                sim.y = (state.material === 'none' ? groundY : cushionTop) - 50;
+                sim.bounces++;
                 
-                if (objectBottom >= collisionY) {
-                    if (!state.simData.impactStart) {
-                        state.simData.impactStart = state.simData.time;
-                    }
-                    
-                    // Calculate force
-                    const penetration = Math.max(0, objectBottom - collisionY) / 100;
-                    const force = mat.k * penetration + mat.c * vel * 10;
-                    state.simData.maxForce = Math.max(state.simData.maxForce, force);
-                    state.simData.forceHistory.push(force);
-                    
-                    // Bounce
-                    state.simData.vy = -Math.abs(state.simData.vy) * (1 - mat.c);
-                    state.simData.y = collisionY - 60;
-                    
-                    // Stop condition
-                    if (Math.abs(state.simData.vy) < 50) {
-                        state.simData.impactEnd = state.simData.time;
-                        finishSimulation(mass, height, thickness);
-                        return;
-                    }
+                // Apply friction
+                sim.vx *= (1 - params.friction * dt);
+                
+                // Stop condition
+                if (sim.bounces > 3 || Math.abs(sim.vy) < 20) {
+                    sim.impactEnd = sim.time;
+                    finishSimulation(params);
+                    return;
                 }
-                
-                // Update displays
-                const currentHeight = Math.max(0, (groundY - objectBottom) / 100);
-                document.getElementById('liveHeight').textContent = currentHeight.toFixed(2);
-                document.getElementById('liveVel').textContent = vel.toFixed(2);
-                document.getElementById('liveForce').textContent = state.simData.maxForce.toFixed(1);
-                document.getElementById('liveTime').textContent = state.simData.time.toFixed(2);
-                
-                state.simData.time += 0.016;
-                state.animId = requestAnimationFrame(animate);
             }
             
-            animate();
+            // Store data for charts
+            state.forceData.push(force);
+            state.velocityData.push(velocity);
+            state.timeData.push(sim.time);
+            
+            // Keep only recent data points
+            if (state.forceData.length > state.maxDataPoints) {
+                state.forceData.shift();
+                state.velocityData.shift();
+                state.timeData.shift();
+            }
+            
+            // Draw frame
+            drawFrame(params);
+            
+            // Update live data
+            updateLiveData(params, velocity, force);
+            
+            // Update charts
+            drawForceChart();
+            drawVelocityChart();
+            
+            sim.time += dt;
+            
+            state.animationId = requestAnimationFrame(() => animate(params));
         }
 
-        // Finish simulation
-        function finishSimulation(mass, height, thickness) {
-            state.isRunning = false;
+        function drawFrame(params) {
+            drawStaticScene();
             
-            const maxVel = state.simData.maxVel;
-            const maxForce = state.simData.maxForce;
-            const impactTime = (state.simData.impactEnd - state.simData.impactStart) * 1000;
-            const ke = 0.5 * mass * maxVel * maxVel;
-            const pe = mass * 9.81 * height;
-            const energyLoss = ((pe - ke) / pe * 100) || 0;
+            const groundY = simCanvas.height - 60;
+            const cushionTop = groundY - params.thickness * 5000;
             
-            // Update displays
-            document.getElementById('peakForce').textContent = maxForce.toFixed(1) + ' N';
-            document.getElementById('impactTime').textContent = impactTime.toFixed(1) + ' ms';
-            document.getElementById('maxSpeed').textContent = maxVel.toFixed(2) + ' m/s';
-            document.getElementById('energyLost').textContent = Math.abs(energyLoss).toFixed(1) + '%';
+            // Draw cushion
+            if (state.material !== 'none' && params.thickness > 0) {
+                const mat = materials[state.material];
+                simCtx.fillStyle = mat.color;
+                simCtx.globalAlpha = 0.7;
+                simCtx.fillRect(0, cushionTop, simCanvas.width, groundY - cushionTop);
+                simCtx.globalAlpha = 1;
+            }
             
-            // Save trial
-            state.trialNum++;
-            state.trials.push({
-                num: state.trialNum,
-                mass: mass * 1000,
-                height: height,
-                material: state.material,
-                thickness: thickness * 1000,
-                force: maxForce,
-                energy: energyLoss,
-                forceHistory: state.simData.forceHistory
+            // Draw phone
+            simCtx.save();
+            simCtx.translate(sim.x, sim.y);
+            
+            // Phone shadow
+            simCtx.fillStyle = 'rgba(0,0,0,0.3)';
+            simCtx.fillRect(-18, 52, 36, 6);
+            
+            // Phone body
+            simCtx.fillStyle = '#334155';
+            simCtx.fillRect(-20, 0, 40, 50);
+            
+            // Screen
+            simCtx.fillStyle = '#60a5fa';
+            simCtx.fillRect(-18, 3, 36, 38);
+            
+            // Screen details
+            simCtx.fillStyle = '#1e293b';
+            simCtx.fillRect(-15, 43, 30, 4);
+            
+            simCtx.restore();
+            
+            // Draw vectors if enabled
+            if (state.showVectors) {
+                drawVectors();
+            }
+        }
+
+        function drawVectors() {
+            const scale = 0.5;
+            
+            // Velocity vector
+            simCtx.strokeStyle = '#60a5fa';
+            simCtx.lineWidth = 2;
+            simCtx.beginPath();
+            simCtx.moveTo(sim.x, sim.y + 25);
+            simCtx.lineTo(sim.x + sim.vx * scale, sim.y + 25 + sim.vy * scale);
+            simCtx.stroke();
+            
+            // Force vector
+            if (sim.maxForce > 0) {
+                simCtx.strokeStyle = '#f87171';
+                simCtx.beginPath();
+                simCtx.moveTo(sim.x, sim.y + 25);
+                simCtx.lineTo(sim.x, sim.y + 25 - sim.maxForce * 0.1);
+                simCtx.stroke();
+            }
+        }
+
+        function updateLiveData(params, velocity, force) {
+            const height = Math.max(0, (simCanvas.height - 60 - sim.y - 50) / 120);
+            
+            document.getElementById('liveHeight').textContent = height.toFixed(2) + ' m';
+            document.getElementById('liveVelocity').textContent = velocity.toFixed(2) + ' m/s';
+            document.getElementById('liveForce').textContent = force.toFixed(1) + ' N';
+            document.getElementById('liveTime').textContent = sim.time.toFixed(2) + ' s';
+            
+            // Update energy bar
+            const maxKE = 0.5 * params.mass * sim.maxVelocity * sim.maxVelocity;
+            const currentKE = 0.5 * params.mass * velocity * velocity;
+            const kePercent = maxKE > 0 ? (currentKE / maxKE * 100) : 0;
+            
+            document.getElementById('energyBar').style.width = kePercent + '%';
+            document.getElementById('kePercent').textContent = kePercent.toFixed(0);
+        }
+
+        function drawForceChart() {
+            forceCtx.fillStyle = '#334155';
+            forceCtx.fillRect(0, 0, forceChart.width, forceChart.height);
+            
+            if (state.forceData.length < 2) return;
+            
+            const padding = 10;
+            const width = forceChart.width - padding * 2;
+            const height = forceChart.height - padding * 2;
+            const maxForce = Math.max(...state.forceData, 1);
+            
+            // Draw grid
+            forceCtx.strokeStyle = 'rgba(148,163,184,0.2)';
+            forceCtx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                const y = padding + (i / 4) * height;
+                forceCtx.beginPath();
+                forceCtx.moveTo(padding, y);
+                forceCtx.lineTo(forceChart.width - padding, y);
+                forceCtx.stroke();
+            }
+            
+            // Draw line
+            forceCtx.strokeStyle = '#f87171';
+            forceCtx.lineWidth = 2;
+            forceCtx.beginPath();
+            
+            state.forceData.forEach((force, i) => {
+                const x = padding + (i / (state.forceData.length - 1)) * width;
+                const y = padding + height - (force / maxForce) * height;
+                
+                if (i === 0) {
+                    forceCtx.moveTo(x, y);
+                } else {
+                    forceCtx.lineTo(x, y);
+                }
             });
             
-            updateTrials();
-            drawChart();
+            forceCtx.stroke();
+            
+            // Labels
+            forceCtx.fillStyle = '#94a3b8';
+            forceCtx.font = '10px sans-serif';
+            forceCtx.fillText(maxForce.toFixed(0) + ' N', 5, padding + 10);
+            forceCtx.fillText('0', 5, forceChart.height - 5);
         }
 
-        // Update trials display
+        function drawVelocityChart() {
+            velocityCtx.fillStyle = '#334155';
+            velocityCtx.fillRect(0, 0, velocityChart.width, velocityChart.height);
+            
+            if (state.velocityData.length < 2) return;
+            
+            const padding = 10;
+            const width = velocityChart.width - padding * 2;
+            const height = velocityChart.height - padding * 2;
+            const maxVel = Math.max(...state.velocityData, 1);
+            
+            // Draw grid
+            velocityCtx.strokeStyle = 'rgba(148,163,184,0.2)';
+            velocityCtx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                const y = padding + (i / 4) * height;
+                velocityCtx.beginPath();
+                velocityCtx.moveTo(padding, y);
+                velocityCtx.lineTo(velocityChart.width - padding, y);
+                velocityCtx.stroke();
+            }
+            
+            // Draw line
+            velocityCtx.strokeStyle = '#60a5fa';
+            velocityCtx.lineWidth = 2;
+            velocityCtx.beginPath();
+            
+            state.velocityData.forEach((vel, i) => {
+                const x = padding + (i / (state.velocityData.length - 1)) * width;
+                const y = padding + height - (vel / maxVel) * height;
+                
+                if (i === 0) {
+                    velocityCtx.moveTo(x, y);
+                } else {
+                    velocityCtx.lineTo(x, y);
+                }
+            });
+            
+            velocityCtx.stroke();
+            
+            // Labels
+            velocityCtx.fillStyle = '#94a3b8';
+            velocityCtx.font = '10px sans-serif';
+            velocityCtx.fillText(maxVel.toFixed(1) + ' m/s', 5, padding + 10);
+            velocityCtx.fillText('0', 5, velocityChart.height - 5);
+        }
+
+        function showImpact() {
+            const indicator = document.getElementById('impactIndicator');
+            indicator.style.display = 'block';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 500);
+        }
+
+        function finishSimulation(params) {
+            state.isRunning = false;
+            document.getElementById('runBtn').disabled = false;
+            
+            // Calculate results
+            const impactTime = (sim.impactEnd - sim.impactStart) * 1000;
+            const initialPE = params.mass * 9.81 * params.height;
+            const maxKE = 0.5 * params.mass * sim.maxVelocity * sim.maxVelocity;
+            const energyLoss = ((initialPE - maxKE) / initialPE * 100) || 0;
+            
+            // Update displays
+            document.getElementById('peakForce').textContent = sim.maxForce.toFixed(1);
+            document.getElementById('impactTime').textContent = impactTime.toFixed(1);
+            document.getElementById('maxSpeed').textContent = sim.maxVelocity.toFixed(2);
+            document.getElementById('energyLoss').textContent = Math.abs(energyLoss).toFixed(1);
+            
+            // Save trial
+            state.trialCounter++;
+            const trial = {
+                id: Date.now(),
+                num: state.trialCounter,
+                mass: params.mass * 1000,
+                height: params.height,
+                material: state.material,
+                thickness: params.thickness * 1000,
+                force: sim.maxForce,
+                energy: Math.abs(energyLoss)
+            };
+            
+            state.trials.push(trial);
+            state.currentTrial = trial;
+            
+            // Keep only last 10 trials
+            if (state.trials.length > 10) {
+                state.trials = state.trials.slice(-10);
+            }
+            
+            updateTrials();
+            drawComparisonChart();
+        }
+
         function updateTrials() {
             const tbody = document.getElementById('trialsBody');
             tbody.innerHTML = '';
             
-            // Find best
-            let minForce = Infinity;
+            // Find best trial
+            let bestForce = Infinity;
             let bestTrial = null;
             state.trials.forEach(t => {
-                if (t.force < minForce) {
-                    minForce = t.force;
+                if (t.force < bestForce) {
+                    bestForce = t.force;
                     bestTrial = t;
                 }
             });
             
-            // Show last 10 trials
-            state.trials.slice(-10).reverse().forEach(trial => {
+            // Display trials (newest first)
+            [...state.trials].reverse().forEach(trial => {
                 const row = document.createElement('div');
                 row.className = 'trial-row';
                 if (trial === bestTrial) row.className += ' best';
@@ -751,111 +1434,132 @@
                 row.innerHTML = `
                     <div>#${trial.num}</div>
                     <div>${trial.material} ${trial.thickness.toFixed(0)}mm</div>
-                    <div>${trial.force.toFixed(1)}N</div>
-                    <div>${trial.energy.toFixed(1)}%</div>
-                    <div><button onclick="deleteTrial(${trial.num})" style="background: var(--danger); color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;">×</button></div>
+                    <div>${trial.force.toFixed(0)}N</div>
+                    <div>${trial.energy.toFixed(0)}%</div>
+                    <button class="delete-btn" onclick="deleteTrial(${trial.id})">×</button>
                 `;
+                
                 tbody.appendChild(row);
             });
         }
 
-        // Draw chart
-        function drawChart() {
-            chartCtx.fillStyle = '#334155';
-            chartCtx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
+        function drawComparisonChart() {
+            comparisonCtx.fillStyle = '#334155';
+            comparisonCtx.fillRect(0, 0, comparisonChart.width, comparisonChart.height);
             
             if (state.trials.length === 0) return;
             
-            // Get last 5 trials
+            const padding = 20;
+            const width = comparisonChart.width - padding * 2;
+            const height = comparisonChart.height - padding * 2;
             const trials = state.trials.slice(-5);
             const maxForce = Math.max(...trials.map(t => t.force));
             
             // Draw bars
-            const barWidth = chartCanvas.width / trials.length * 0.8;
-            const gap = chartCanvas.width / trials.length * 0.2;
+            const barWidth = width / trials.length * 0.7;
+            const gap = width / trials.length * 0.3;
             
             trials.forEach((trial, i) => {
-                const barHeight = (trial.force / maxForce) * (chartCanvas.height - 30);
-                const x = i * (barWidth + gap) + gap/2;
-                const y = chartCanvas.height - barHeight - 20;
+                const barHeight = (trial.force / maxForce) * height;
+                const x = padding + i * (barWidth + gap) + gap/2;
+                const y = padding + height - barHeight;
                 
-                // Bar
-                chartCtx.fillStyle = trial === state.trials[state.trials.length-1] ? '#60a5fa' : '#64748b';
-                chartCtx.fillRect(x, y, barWidth, barHeight);
+                // Bar color
+                let color = '#64748b';
+                if (trial === state.currentTrial) color = '#60a5fa';
+                if (trial.force === Math.min(...trials.map(t => t.force))) color = '#34d399';
                 
-                // Label
-                chartCtx.fillStyle = '#94a3b8';
-                chartCtx.font = '10px sans-serif';
-                chartCtx.textAlign = 'center';
-                chartCtx.fillText(trial.material, x + barWidth/2, chartCanvas.height - 5);
+                comparisonCtx.fillStyle = color;
+                comparisonCtx.fillRect(x, y, barWidth, barHeight);
                 
-                // Value
-                chartCtx.fillStyle = '#f1f5f9';
-                chartCtx.fillText(trial.force.toFixed(0) + 'N', x + barWidth/2, y - 5);
+                // Value label
+                comparisonCtx.fillStyle = '#f1f5f9';
+                comparisonCtx.font = '10px sans-serif';
+                comparisonCtx.textAlign = 'center';
+                comparisonCtx.fillText(trial.force.toFixed(0), x + barWidth/2, y - 5);
+                
+                // Material label
+                comparisonCtx.fillStyle = '#94a3b8';
+                comparisonCtx.fillText(trial.material.slice(0,3), x + barWidth/2, comparisonChart.height - 5);
             });
         }
 
-        // Delete trial
-        function deleteTrial(num) {
-            state.trials = state.trials.filter(t => t.num !== num);
+        function deleteTrial(id) {
+            state.trials = state.trials.filter(t => t.id !== id);
             updateTrials();
-            drawChart();
+            drawComparisonChart();
         }
 
-        // Reset
-        function resetAll() {
-            if (state.animId) cancelAnimationFrame(state.animId);
+        function resetSimulation() {
             state.isRunning = false;
-            state.trials = [];
-            state.trialNum = 0;
+            document.getElementById('runBtn').disabled = false;
             
-            document.getElementById('peakForce').textContent = '---';
-            document.getElementById('impactTime').textContent = '---';
-            document.getElementById('maxSpeed').textContent = '---';
-            document.getElementById('energyLost').textContent = '---';
-            document.getElementById('trialsBody').innerHTML = '';
+            if (state.animationId) {
+                cancelAnimationFrame(state.animationId);
+            }
             
+            // Clear data
+            state.forceData = [];
+            state.velocityData = [];
+            state.timeData = [];
+            
+            // Reset displays
+            document.getElementById('liveHeight').textContent = '0.00 m';
+            document.getElementById('liveVelocity').textContent = '0.00 m/s';
+            document.getElementById('liveForce').textContent = '0.0 N';
+            document.getElementById('liveTime').textContent = '0.00 s';
+            
+            // Clear charts
             drawStaticScene();
-            chartCtx.fillStyle = '#334155';
-            chartCtx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
+            forceCtx.fillStyle = '#334155';
+            forceCtx.fillRect(0, 0, forceChart.width, forceChart.height);
+            velocityCtx.fillStyle = '#334155';
+            velocityCtx.fillRect(0, 0, velocityChart.width, velocityChart.height);
         }
 
         // Export functions
         function exportCSV() {
             if (state.trials.length === 0) {
-                alert('No data to export!');
+                alert('No data to export! Run some simulations first.');
                 return;
             }
             
-            let csv = 'Trial,Mass(g),Height(m),Material,Thickness(mm),Force(N),EnergyLoss(%)\n';
+            let csv = 'Trial,Mass(g),Height(m),Material,Thickness(mm),PeakForce(N),EnergyLoss(%)\n';
             state.trials.forEach(t => {
-                csv += `${t.num},${t.mass},${t.height},${t.material},${t.thickness},${t.force.toFixed(1)},${t.energy.toFixed(1)}\n`;
+                csv += `${t.num},${t.mass},${t.height},${t.material},${t.thickness},${t.force.toFixed(2)},${t.energy.toFixed(2)}\n`;
             });
             
-            const blob = new Blob([csv], {type: 'text/csv'});
+            const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'collision_data.csv';
+            a.download = `collision_forces_data_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
         }
 
         function exportJSON() {
             if (state.trials.length === 0) {
-                alert('No data to export!');
+                alert('No data to export! Run some simulations first.');
                 return;
             }
             
-            const blob = new Blob([JSON.stringify(state.trials, null, 2)], {type: 'application/json'});
+            const exportData = {
+                date: new Date().toISOString(),
+                trials: state.trials,
+                summary: {
+                    totalTrials: state.trials.length,
+                    bestForce: Math.min(...state.trials.map(t => t.force)),
+                    averageForce: state.trials.reduce((sum, t) => sum + t.force, 0) / state.trials.length
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'collision_data.json';
+            a.download = `collision_forces_data_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
         }
-
-        // Initialize
-        updateFormulas();
     </script>
 </body>
 </html>
