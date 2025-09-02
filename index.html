@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collision Forces Lab - OpenSciEd Unit 8.1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #60a5fa;
+            --secondary: #34d399;
+            --accent: #fbbf24;
+            --danger: #f87171;
+            --dark: #0f172a;
+            --dark-panel: #1e293b;
+            --dark-input: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-dim: #64748b;
+            --border: #334155;
+            --success: #4ade80;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .app-header {
+            background: var(--dark-panel);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .version-badge {
+            background: var(--dark-input);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .learning-goals {
+            background: var(--dark-panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 1rem auto;
+            max-width: 1600px;
+        }
+
+        .goal-badge {
+            display: inline-block;
+            background: var(--dark-input);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 350px 1fr 320px;
+            gap: 1rem;
+        }
+
+        .panel {
+            background: var(--dark-panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .control-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--dark-input);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(96,165,250,0.5);
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(96,165,250,0.8);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(96,165,250,0.5);
+            border: none;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .preset-btn {
+            padding: 0.75rem;
+            background: var(--dark-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary);
+            background: rgba(96,165,250,0.1);
+        }
+
+        .preset-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .material-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .material-btn {
+            padding: 0.5rem;
+            background: var(--dark-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .material-btn.selected {
+            background: var(--secondary);
+            color: var(--dark);
+            border-color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .measurement-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(15,23,42,0.95);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .run-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .data-card {
+            background: var(--dark-input);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .data-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .trials-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .trials-header {
+            display: grid;
+            grid-template-columns: 40px 1fr 80px 80px 60px;
+            gap: 0.5rem;
+            padding: 0.75rem 0.5rem;
+            background: var(--dark-input);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .trial-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 80px 80px 60px;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--dark-panel);
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            transition: background 0.2s;
+        }
+
+        .trial-row:hover {
+            background: var(--dark-input);
+        }
+
+        .trial-row.best {
+            background: rgba(52,211,153,0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .trial-number {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .trial-delete {
+            padding: 0.25rem 0.5rem;
+            background: var(--danger);
+            color: var(--dark);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .trial-delete:hover {
+            background: #ef4444;
+            transform: scale(1.1);
+        }
+
+        .comparison-chart {
+            margin-top: 1rem;
+            height: 250px;
+            position: relative;
+            background: var(--dark-input);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .export-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .formula-box {
+            background: var(--dark-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .formula {
+            font-size: 1rem;
+            color: var(--primary);
+            margin: 0.25rem 0;
+            font-weight: 500;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--dark-input);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .canvas-container {
+                height: 400px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-input);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">⚡ Collision Forces Laboratory</h1>
+            <div class="version-badge">OpenSciEd Unit 8.1 | v1.0.0</div>
+        </div>
+    </div>
+
+    <div class="learning-goals">
+        <div style="font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">🎯 Core Concepts</div>
+        <span class="goal-badge">Newton's Laws</span>
+        <span class="goal-badge">Energy Conservation</span>
+        <span class="goal-badge">Impulse & Momentum</span>
+        <span class="goal-badge">KE = ½mv²</span>
+        <span class="goal-badge">F = ma</span>
+        <span class="goal-badge">J = FΔt</span>
+        <span class="goal-badge">Structure → Function</span>
+    </div>
+
+    <div class="main-container">
+        <!-- Control Panel -->
+        <div class="panel">
+            <div class="panel-title">⚙️ Experiment Controls</div>
+            
+            <div class="control-group">
+                <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">Quick Experiments</div>
+                <div class="preset-grid">
+                    <button class="preset-btn" onclick="loadPreset('drop')">📱 Basic Drop</button>
+                    <button class="preset-btn" onclick="loadPreset('mass')">⚖️ Mass Study</button>
+                    <button class="preset-btn" onclick="loadPreset('height')">📏 Height Test</button>
+                    <button class="preset-btn" onclick="loadPreset('angle')">📐 Angle Impact</button>
+                    <button class="preset-btn" onclick="loadPreset('materials')">🧪 Materials</button>
+                    <button class="preset-btn" onclick="loadPreset('optimal')">🎯 Optimal</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">Object Properties</div>
+                
+                <div class="control-label">
+                    <span>Mass</span>
+                    <span class="control-value" id="massValue">150 g</span>
+                </div>
+                <input type="range" class="slider" id="mass" min="50" max="500" value="150" step="10">
+                
+                <div class="control-label">
+                    <span>Drop Height</span>
+                    <span class="control-value" id="heightValue">1.5 m</span>
+                </div>
+                <input type="range" class="slider" id="height" min="0.5" max="3" value="1.5" step="0.1">
+                
+                <div class="control-label">
+                    <span>Initial Speed</span>
+                    <span class="control-value" id="speedValue">0 m/s</span>
+                </div>
+                <input type="range" class="slider" id="speed" min="0" max="10" value="0" step="0.5">
+                
+                <div class="control-label">
+                    <span>Impact Angle</span>
+                    <span class="control-value" id="angleValue">90°</span>
+                </div>
+                <input type="range" class="slider" id="angle" min="45" max="90" value="90" step="5">
+            </div>
+
+            <div class="control-group">
+                <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">Cushioning Material</div>
+                
+                <div class="material-selector">
+                    <button class="material-btn selected" data-material="none" onclick="selectMaterial('none')">None</button>
+                    <button class="material-btn" data-material="foam" onclick="selectMaterial('foam')">Foam</button>
+                    <button class="material-btn" data-material="gel" onclick="selectMaterial('gel')">Gel</button>
+                    <button class="material-btn" data-material="air" onclick="selectMaterial('air')">Air</button>
+                    <button class="material-btn" data-material="rubber" onclick="selectMaterial('rubber')">Rubber</button>
+                    <button class="material-btn" data-material="spring" onclick="selectMaterial('spring')">Spring</button>
+                </div>
+                
+                <div class="control-label" style="margin-top: 1rem;">
+                    <span>Thickness</span>
+                    <span class="control-value" id="thicknessValue">10 mm</span>
+                </div>
+                <input type="range" class="slider" id="thickness" min="5" max="30" value="10" step="1">
+                
+                <div class="control-label">
+                    <span>Stiffness</span>
+                    <span class="control-value" id="stiffnessValue">Medium</span>
+                </div>
+                <input type="range" class="slider" id="stiffness" min="1" max="3" value="2" step="1">
+            </div>
+
+            <div class="run-controls">
+                <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">▶ RUN</button>
+                <button class="btn btn-secondary" onclick="pauseSimulation()">⏸ PAUSE</button>
+                <button class="btn btn-danger" onclick="resetAll()">↺ RESET</button>
+            </div>
+
+            <div class="help-text">
+                💡 Run multiple trials, then compare results in the data table below
+            </div>
+        </div>
+
+        <!-- Simulation View -->
+        <div class="panel">
+            <div class="panel-title">🔬 Live Simulation</div>
+            
+            <div class="canvas-container">
+                <canvas id="simCanvas"></canvas>
+                <div class="measurement-overlay">
+                    <div style="font-weight: 700; margin-bottom: 5px;">Measurements</div>
+                    <div>Height: <span id="liveHeight" style="color: var(--accent);">1.50</span> m</div>
+                    <div>Velocity: <span id="liveVelocity" style="color: var(--primary);">0.00</span> m/s</div>
+                    <div>KE: <span id="liveKE" style="color: var(--secondary);">0.00</span> J</div>
+                    <div>Force: <span id="liveForce" style="color: var(--danger);">0.00</span> N</div>
+                    <div>Time: <span id="liveTime">0.000</span> s</div>
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <div class="formula">KE = ½ × <span id="fMass">0.150</span> kg × (<span id="fVel">0.00</span> m/s)² = <span id="fKE">0.00</span> J</div>
+                <div class="formula">v = √(2gh) = √(2 × 9.81 × <span id="fHeight">1.50</span>) = <span id="fVelCalc">5.42</span> m/s</div>
+                <div class="formula">F = Δp/Δt = <span id="fMomentum">0.00</span> kg⋅m/s ÷ <span id="fTime">0.000</span> s = <span id="fForce">0.00</span> N</div>
+            </div>
+
+            <div class="comparison-chart">
+                <svg class="chart-svg" id="chartSvg"></svg>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="panel">
+            <div class="panel-title">📊 Data Analysis</div>
+            
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-label">Peak Force</div>
+                    <div class="data-value" id="peakForce">---</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">Impact Time</div>
+                    <div class="data-value" id="impactTime">---</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">Max Speed</div>
+                    <div class="data-value" id="maxSpeed">---</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-label">Energy Lost</div>
+                    <div class="data-value" id="energyLost">---</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; font-weight: 600; color: var(--text-primary);">Trial History</div>
+            <div class="trials-container">
+                <div class="trials-header">
+                    <div>Trial</div>
+                    <div>Setup</div>
+                    <div>Force</div>
+                    <div>Energy</div>
+                    <div>Action</div>
+                </div>
+                <div id="trialsBody">
+                    <!-- Trials will be added here -->
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--success);"></div>
+                    <span>Best (Lowest Force)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--primary);"></div>
+                    <span>Current Trial</span>
+                </div>
+            </div>
+
+            <div class="export-controls">
+                <button class="btn btn-secondary" onclick="exportCSV()">📊 Export CSV</button>
+                <button class="btn btn-secondary" onclick="exportJSON()">📋 Export JSON</button>
+            </div>
+
+            <div class="help-text" style="margin-top: 1rem;">
+                ✅ All data auto-saves | Export for analysis in Excel/Sheets
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        // Global state
+        const state = {
+            isRunning: false,
+            isPaused: false,
+            animationId: null,
+            currentMaterial: 'none',
+            trials: [],
+            currentTrial: null,
+            trialCounter: 0
+        };
+
+        // Canvas setup
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            drawScene();
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            drawScene();
+        });
+        
+        window.addEventListener('resize', resizeCanvas);
+
+        // Slider event listeners
+        document.querySelectorAll('.slider').forEach(slider => {
+            slider.addEventListener('input', () => updateDisplay(slider));
+        });
+
+        function updateDisplay(slider) {
+            const displays = {
+                mass: v => `${v} g`,
+                height: v => `${v} m`,
+                speed: v => `${v} m/s`,
+                angle: v => `${v}°`,
+                thickness: v => `${v} mm`,
+                stiffness: v => ['Soft', 'Medium', 'Hard'][v-1]
+            };
+            
+            const valueSpan = document.getElementById(slider.id + 'Value');
+            if (valueSpan && displays[slider.id]) {
+                valueSpan.textContent = displays[slider.id](slider.value);
+            }
+        }
+
+        // Material selection
+        function selectMaterial(material) {
+            state.currentMaterial = material;
+            document.querySelectorAll('.material-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.material === material);
+            });
+            
+            // Auto-adjust properties
+            const materialProps = {
+                none: { thickness: 0, stiffness: 3 },
+                foam: { thickness: 15, stiffness: 1 },
+                gel: { thickness: 10, stiffness: 2 },
+                air: { thickness: 20, stiffness: 1 },
+                rubber: { thickness: 8, stiffness: 3 },
+                spring: { thickness: 12, stiffness: 2 }
+            };
+            
+            const props = materialProps[material];
+            if (props) {
+                document.getElementById('thickness').value = props.thickness;
+                document.getElementById('stiffness').value = props.stiffness;
+                updateDisplay(document.getElementById('thickness'));
+                updateDisplay(document.getElementById('stiffness'));
+            }
+        }
+
+        // Preset configurations
+        function loadPreset(type) {
+            const presets = {
+                drop: { mass: 150, height: 1.5, speed: 0, angle: 90, material: 'none' },
+                mass: { mass: 350, height: 1, speed: 0, angle: 90, material: 'foam' },
+                height: { mass: 150, height: 2.5, speed: 0, angle: 90, material: 'foam' },
+                angle: { mass: 150, height: 1.5, speed: 3, angle: 60, material: 'gel' },
+                materials: { mass: 150, height: 1.5, speed: 0, angle: 90, material: 'air' },
+                optimal: { mass: 150, height: 2, speed: 0, angle: 90, material: 'gel' }
+            };
+            
+            const config = presets[type];
+            if (!config) return;
+            
+            Object.keys(config).forEach(key => {
+                if (key === 'material') {
+                    selectMaterial(config[key]);
+                } else {
+                    const slider = document.getElementById(key);
+                    if (slider) {
+                        slider.value = config[key];
+                        updateDisplay(slider);
+                    }
+                }
+            });
+            
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Physics simulation
+        function runSimulation() {
+            if (state.isRunning && !state.isPaused) return;
+            
+            // Reset if starting new simulation
+            if (!state.isPaused) {
+                state.isRunning = true;
+                state.isPaused = false;
+                document.getElementById('runBtn').textContent = '⏸ PAUSE';
+                
+                // Get parameters
+                const params = {
+                    mass: parseFloat(document.getElementById('mass').value) / 1000,
+                    height: parseFloat(document.getElementById('height').value),
+                    speed: parseFloat(document.getElementById('speed').value),
+                    angle: parseFloat(document.getElementById('angle').value) * Math.PI / 180,
+                    material: state.currentMaterial,
+                    thickness: parseFloat(document.getElementById('thickness').value) / 1000,
+                    stiffness: parseInt(document.getElementById('stiffness').value)
+                };
+                
+                startPhysicsSimulation(params);
+            } else {
+                // Resume from pause
+                state.isPaused = false;
+                document.getElementById('runBtn').textContent = '⏸ PAUSE';
+            }
+        }
+
+        function pauseSimulation() {
+            if (state.isRunning) {
+                state.isPaused = !state.isPaused;
+                document.getElementById('runBtn').textContent = state.isPaused ? '▶ RESUME' : '⏸ PAUSE';
+            }
+        }
+
+        function startPhysicsSimulation(params) {
+            const g = 9.81;
+            const dt = 0.001; // 1ms timestep for accuracy
+            const pixelsPerMeter = 150;
+            
+            // Initial conditions
+            let x = canvas.width / 2;
+            let y = 50;
+            let vx = params.speed * Math.cos(params.angle);
+            let vy = params.speed * Math.sin(params.angle);
+            let time = 0;
+            let maxVelocity = 0;
+            let maxForce = 0;
+            let impactStartTime = null;
+            let impactEndTime = null;
+            let totalImpulse = 0;
+            
+            // Material properties (realistic values)
+            const materials = {
+                none: { k: 50000, c: 0.95 },    // Very stiff, high restitution
+                foam: { k: 5000, c: 0.3 },       // Soft, low restitution
+                gel: { k: 8000, c: 0.2 },        // Medium, very low restitution
+                air: { k: 3000, c: 0.25 },       // Very soft, low restitution
+                rubber: { k: 15000, c: 0.6 },    // Stiff, medium restitution
+                spring: { k: 10000, c: 0.4 }     // Medium, low-medium restitution
+            };
+            
+            const mat = materials[params.material];
+            mat.k *= params.stiffness; // Adjust stiffness
+            
+            const groundY = (canvas.height - 100) / pixelsPerMeter;
+            const cushionTop = groundY - params.thickness;
+            
+            // Data arrays
+            const forceHistory = [];
+            const velocityHistory = [];
+            let frameCounter = 0;
+            
+            function animate() {
+                if (!state.isRunning) {
+                    cancelAnimationFrame(state.animationId);
+                    return;
+                }
+                
+                if (state.isPaused) {
+                    state.animationId = requestAnimationFrame(animate);
+                    return;
+                }
+                
+                // Run multiple physics steps per frame for accuracy
+                for (let i = 0; i < 16; i++) {
+                    // Apply gravity
+                    vy += g * dt;
+                    
+                    // Update position
+                    y += vy * dt;
+                    x += vx * dt;
+                    
+                    const velocity = Math.sqrt(vx * vx + vy * vy);
+                    maxVelocity = Math.max(maxVelocity, velocity);
+                    
+                    // Collision detection
+                    const objectBottom = y + 0.06; // 6cm object height
+                    let force = 0;
+                    
+                    if (objectBottom >= (params.material === 'none' ? groundY : cushionTop)) {
+                        if (impactStartTime === null) {
+                            impactStartTime = time;
+                        }
+                        
+                        // Calculate penetration depth
+                        const penetration = objectBottom - (params.material === 'none' ? groundY : cushionTop);
+                        
+                        if (penetration > 0) {
+                            // Spring-damper model: F = kx + cv
+                            force = mat.k * penetration + mat.c * mat.k * vy * dt;
+                            maxForce = Math.max(maxForce, force);
+                            
+                            // Apply force (F = ma, so a = F/m)
+                            const acceleration = -force / params.mass;
+                            vy += acceleration * dt;
+                            
+                            // Track impulse (J = F * dt)
+                            totalImpulse += force * dt;
+                        }
+                        
+                        // Check if bounce is complete
+                        if (vy > 0 && impactEndTime === null) {
+                            impactEndTime = time;
+                        }
+                        
+                        // Stop after significant energy loss
+                        if (velocity < 0.1 && penetration < 0.001) {
+                            finishSimulation(params, maxVelocity, maxForce, impactEndTime - impactStartTime, totalImpulse, forceHistory, velocityHistory);
+                            return;
+                        }
+                    }
+                    
+                    // Record data
+                    forceHistory.push(force);
+                    velocityHistory.push(velocity);
+                    
+                    time += dt;
+                    
+                    // Safety timeout
+                    if (time > 5) {
+                        finishSimulation(params, maxVelocity, maxForce, 0.1, totalImpulse, forceHistory, velocityHistory);
+                        return;
+                    }
+                }
+                
+                // Draw frame
+                frameCounter++;
+                if (frameCounter % 2 === 0) { // Draw every other frame for performance
+                    drawFrame(x * pixelsPerMeter, y * pixelsPerMeter, params, groundY * pixelsPerMeter, cushionTop * pixelsPerMeter);
+                    updateLiveData(y, Math.sqrt(vx * vx + vy * vy), params.mass, time);
+                }
+                
+                state.animationId = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function drawFrame(x, y, params, groundY, cushionTop) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawScene();
+            
+            // Draw cushion
+            if (params.material !== 'none') {
+                const colors = {
+                    foam: '#fbbf24',
+                    gel: '#60a5fa',
+                    air: '#e0f7fa',
+                    rubber: '#c084fc',
+                    spring: '#34d399'
+                };
+                
+                ctx.fillStyle = colors[params.material] || '#94a3b8';
+                ctx.globalAlpha = 0.7;
+                ctx.fillRect(0, cushionTop, canvas.width, groundY - cushionTop);
+                ctx.globalAlpha = 1;
+            }
+            
+            // Draw object (phone)
+            const phoneWidth = 40;
+            const phoneHeight = 60;
+            
+            // Phone body
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(x - phoneWidth/2, y, phoneWidth, phoneHeight);
+            
+            // Screen
+            ctx.fillStyle = '#60a5fa';
+            ctx.fillRect(x - phoneWidth/2 + 2, y + 5, phoneWidth - 4, phoneHeight - 15);
+            
+            // Home button
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(x - 10, y + phoneHeight - 8, 20, 6);
+        }
+
+        function drawScene() {
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#1e293b');
+            gradient.addColorStop(1, '#0f172a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Ground
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+            
+            // Grid lines
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.1)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < canvas.height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+            
+            // Height markers
+            ctx.fillStyle = '#64748b';
+            ctx.font = '12px monospace';
+            const pixelsPerMeter = 150;
+            
+            for (let h = 0; h <= 3; h += 0.5) {
+                const y = canvas.height - 100 - h * pixelsPerMeter;
+                ctx.fillText(`${h}m`, 10, y);
+                
+                ctx.beginPath();
+                ctx.moveTo(35, y);
+                ctx.lineTo(45, y);
+                ctx.stroke();
+            }
+        }
+
+        function updateLiveData(y, velocity, mass, time) {
+            const height = Math.max(0, ((canvas.height - 100) / 150) - y - 0.06);
+            const ke = 0.5 * mass * velocity * velocity;
+            
+            document.getElementById('liveHeight').textContent = height.toFixed(2);
+            document.getElementById('liveVelocity').textContent = velocity.toFixed(2);
+            document.getElementById('liveKE').textContent = ke.toFixed(2);
+            document.getElementById('liveTime').textContent = time.toFixed(3);
+            
+            // Update formulas
+            document.getElementById('fMass').textContent = mass.toFixed(3);
+            document.getElementById('fVel').textContent = velocity.toFixed(2);
+            document.getElementById('fKE').textContent = ke.toFixed(2);
+            document.getElementById('fHeight').textContent = height.toFixed(2);
+            document.getElementById('fVelCalc').textContent = Math.sqrt(2 * 9.81 * height).toFixed(2);
+        }
+
+        function finishSimulation(params, maxVel, maxForce, impactTime, impulse, forceHistory, velocityHistory) {
+            state.isRunning = false;
+            document.getElementById('runBtn').textContent = '▶ RUN';
+            
+            // Calculate energy metrics
+            const initialKE = 0.5 * params.mass * params.speed * params.speed + params.mass * 9.81 * params.height;
+            const peakKE = 0.5 * params.mass * maxVel * maxVel;
+            const energyLoss = initialKE > 0 ? ((initialKE - peakKE) / initialKE * 100) : 0;
+            
+            // Update displays
+            document.getElementById('peakForce').textContent = `${maxForce.toFixed(1)} N`;
+            document.getElementById('impactTime').textContent = `${(impactTime * 1000).toFixed(2)} ms`;
+            document.getElementById('maxSpeed').textContent = `${maxVel.toFixed(2)} m/s`;
+            document.getElementById('energyLost').textContent = `${Math.abs(energyLoss).toFixed(1)}%`;
+            
+            // Update force calculation in formula
+            document.getElementById('fMomentum').textContent = (params.mass * maxVel).toFixed(3);
+            document.getElementById('fTime').textContent = (impactTime).toFixed(3);
+            document.getElementById('fForce').textContent = maxForce.toFixed(1);
+            document.getElementById('liveForce').textContent = maxForce.toFixed(1);
+            
+            // Save trial
+            state.trialCounter++;
+            const trial = {
+                id: Date.now(),
+                number: state.trialCounter,
+                params: params,
+                results: {
+                    peakForce: maxForce,
+                    impactTime: impactTime * 1000,
+                    maxSpeed: maxVel,
+                    energyLoss: Math.abs(energyLoss),
+                    impulse: impulse
+                }
+            };
+            
+            state.currentTrial = trial;
+            state.trials.push(trial);
+            
+            // Keep only last 20 trials
+            if (state.trials.length > 20) {
+                state.trials = state.trials.slice(-20);
+            }
+            
+            updateTrialsList();
+            drawChart();
+        }
+
+        function updateTrialsList() {
+            const container = document.getElementById('trialsBody');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Find best trial
+            let bestForce = Infinity;
+            let bestTrial = null;
+            
+            state.trials.forEach(trial => {
+                if (trial.results.peakForce < bestForce) {
+                    bestForce = trial.results.peakForce;
+                    bestTrial = trial;
+                }
+            });
+            
+            // Display trials (newest first)
+            [...state.trials].reverse().forEach(trial => {
+                const row = document.createElement('div');
+                row.className = 'trial-row';
+                if (trial === bestTrial) row.className += ' best';
+                
+                const setupText = `${trial.params.material} ${(trial.params.thickness * 1000).toFixed(0)}mm`;
+                
+                row.innerHTML = `
+                    <div class="trial-number">#${trial.number}</div>
+                    <div>${setupText}</div>
+                    <div>${trial.results.peakForce.toFixed(1)} N</div>
+                    <div>${trial.results.energyLoss.toFixed(1)}%</div>
+                    <button class="trial-delete" onclick="deleteTrial(${trial.id})">✕</button>
+                `;
+                
+                container.appendChild(row);
+            });
+        }
+
+        function deleteTrial(id) {
+            state.trials = state.trials.filter(t => t.id !== id);
+            updateTrialsList();
+            drawChart();
+        }
+
+        function drawChart() {
+            const svg = document.getElementById('chartSvg');
+            if (!svg) return;
+            
+            const width = svg.clientWidth;
+            const height = svg.clientHeight;
+            
+            svg.innerHTML = '';
+            
+            if (state.trials.length === 0) {
+                svg.innerHTML = `<text x="${width/2}" y="${height/2}" fill="#64748b" text-anchor="middle" font-size="14">No data yet - run a simulation!</text>`;
+                return;
+            }
+            
+            const trials = state.trials.slice(-8);
+            const maxForce = Math.max(...trials.map(t => t.results.peakForce));
+            const padding = 40;
+            const chartWidth = width - padding * 2;
+            const chartHeight = height - padding * 2;
+            
+            // Axes
+            svg.innerHTML += `
+                <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" 
+                    stroke="#475569" stroke-width="2"/>
+                <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" 
+                    stroke="#475569" stroke-width="2"/>
+                <text x="${padding - 5}" y="${padding}" fill="#94a3b8" font-size="11" text-anchor="end">
+                    ${maxForce.toFixed(0)}N
+                </text>
+                <text x="${padding - 5}" y="${height - padding}" fill="#94a3b8" font-size="11" text-anchor="end">0</text>
+            `;
+            
+            // Bars
+            const barWidth = chartWidth / trials.length * 0.7;
+            const gap = chartWidth / trials.length * 0.3;
+            
+            trials.forEach((trial, i) => {
+                const barHeight = (trial.results.peakForce / maxForce) * chartHeight;
+                const x = padding + i * (barWidth + gap) + gap/2;
+                const y = height - padding - barHeight;
+                
+                let color = '#60a5fa';
+                if (trial === state.currentTrial) color = '#fbbf24';
+                if (trial.results.peakForce === Math.min(...trials.map(t => t.results.peakForce))) color = '#34d399';
+                
+                svg.innerHTML += `
+                    <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" 
+                        fill="${color}" opacity="0.8" rx="4"/>
+                    <text x="${x + barWidth/2}" y="${y - 5}" 
+                        fill="${color}" font-size="10" text-anchor="middle" font-weight="bold">
+                        ${trial.results.peakForce.toFixed(0)}
+                    </text>
+                `;
+            });
+        }
+
+        function resetAll() {
+            // Stop any running simulation
+            state.isRunning = false;
+            state.isPaused = false;
+            
+            if (state.animationId) {
+                cancelAnimationFrame(state.animationId);
+                state.animationId = null;
+            }
+            
+            // Clear data
+            state.trials = [];
+            state.currentTrial = null;
+            state.trialCounter = 0;
+            
+            // Reset displays
+            document.getElementById('runBtn').textContent = '▶ RUN';
+            document.getElementById('peakForce').textContent = '---';
+            document.getElementById('impactTime').textContent = '---';
+            document.getElementById('maxSpeed').textContent = '---';
+            document.getElementById('energyLost').textContent = '---';
+            
+            document.getElementById('trialsBody').innerHTML = '';
+            document.getElementById('chartSvg').innerHTML = '';
+            
+            // Reset live displays
+            document.getElementById('liveHeight').textContent = '1.50';
+            document.getElementById('liveVelocity').textContent = '0.00';
+            document.getElementById('liveKE').textContent = '0.00';
+            document.getElementById('liveForce').textContent = '0.00';
+            document.getElementById('liveTime').textContent = '0.000';
+            
+            drawScene();
+        }
+
+        // Export functions
+        function exportCSV() {
+            if (state.trials.length === 0) {
+                alert('No data to export. Run some simulations first!');
+                return;
+            }
+            
+            let csv = 'Trial,Mass(g),Height(m),Speed(m/s),Angle(°),Material,Thickness(mm),Stiffness,Peak Force(N),Impact Time(ms),Max Speed(m/s),Energy Loss(%),Impulse(N⋅s)\n';
+            
+            state.trials.forEach(trial => {
+                const p = trial.params;
+                const r = trial.results;
+                const stiffnessLabel = ['Soft', 'Medium', 'Hard'][p.stiffness - 1];
+                
+                csv += `${trial.number},${(p.mass * 1000).toFixed(0)},${p.height.toFixed(1)},${p.speed.toFixed(1)},${(p.angle * 180 / Math.PI).toFixed(0)},${p.material},${(p.thickness * 1000).toFixed(0)},${stiffnessLabel},${r.peakForce.toFixed(2)},${r.impactTime.toFixed(2)},${r.maxSpeed.toFixed(2)},${r.energyLoss.toFixed(1)},${r.impulse.toFixed(3)}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `collision_data_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportJSON() {
+            if (state.trials.length === 0) {
+                alert('No data to export. Run some simulations first!');
+                return;
+            }
+            
+            const exportData = {
+                version: '1.0.0',
+                date: new Date().toISOString(),
+                unit: 'OpenSciEd 8.1 - Collision Forces',
+                trials: state.trials.map(trial => ({
+                    number: trial.number,
+                    timestamp: trial.id,
+                    parameters: {
+                        mass_kg: trial.params.mass,
+                        height_m: trial.params.height,
+                        initial_speed_ms: trial.params.speed,
+                        angle_degrees: trial.params.angle * 180 / Math.PI,
+                        material: trial.params.material,
+                        thickness_mm: trial.params.thickness * 1000,
+                        stiffness: ['soft', 'medium', 'hard'][trial.params.stiffness - 1]
+                    },
+                    results: {
+                        peak_force_N: trial.results.peakForce,
+                        impact_time_ms: trial.results.impactTime,
+                        max_speed_ms: trial.results.maxSpeed,
+                        energy_loss_percent: trial.results.energyLoss,
+                        impulse_Ns: trial.results.impulse
+                    }
+                })),
+                summary: {
+                    total_trials: state.trials.length,
+                    best_force_N: Math.min(...state.trials.map(t => t.results.peakForce)),
+                    average_force_N: state.trials.reduce((sum, t) => sum + t.results.peakForce, 0) / state.trials.length,
+                    best_material: state.trials.reduce((best, t) => 
+                        t.results.peakForce < best.force ? {material: t.params.material, force: t.results.peakForce} : best,
+                        {material: '', force: Infinity}).material
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `collision_data_${new Date().toISOString().split('T')[0]}.json`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
